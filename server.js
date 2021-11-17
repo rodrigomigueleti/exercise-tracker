@@ -155,8 +155,6 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		}
 	}
 
-	
-
 	if (!/^\s*$/.test(to)) {
 		try {
 			dtTo = Date.parseExact(from, "yyyy-MM-dd");
@@ -165,13 +163,14 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		}
 	}
 
-	if (!/^\s*$/.test(limit)) {
-		if (/^\d+$/.test(limit)) {
-			limitInt = limit;
-		} 
-		else
-			return res.json({limit: 'Must be integer!'});
-	}
+	if (limit)
+		if (!/^\s*$/.test(limit)) {
+			if (/^[a-zA-Z0-9]+$/.test(limit)) {
+				limitInt = limit;
+			} 
+			else
+				return res.json({limit: 'Must be integer!'});
+		}
 
 	var userObj = await UserObj.findOne({_id : userId}).exec();
 
@@ -210,7 +209,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     	listLog.push({
     		description: exercise.description,
     		duration: exercise.duration,
-    		date: exercise.date.toDateString
+    		date: exercise.date.toDateString()
     	});
     });
     result.count = queryResult.length;
