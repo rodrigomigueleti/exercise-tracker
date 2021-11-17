@@ -27,6 +27,7 @@ const userSchema = new Schema({
 });
 
 const exerciseSchema = new Schema({
+	userId: {type: String, required: true},
 	username: {type: String, required: true},
 	description: {type: String, required: true},
 	duration: {type: Number, required: true, integer: true},
@@ -119,7 +120,7 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
     	throw Error('Invalid User _id');
 
 	exerciseObj = new ExerciseObj({
-		_id : userObj._id,
+		userId: userObj._id,
 		username : userObj.username,
 		description : description,
 		duration : duration,
@@ -131,8 +132,8 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 			username : data.username,
 			description : data.description,
 			duration: data.duration,
-			date: data.date.toString('yyyy-MM-dd'),
-			_id : data._id});
+			date: data.date.toDateString(),
+			_id : data.userId});
 	});
 });
 
@@ -209,7 +210,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     	listLog.push({
     		description: exercise.description,
     		duration: exercise.duration,
-    		date: exercise.date.toString('yyyy-MM-dd')
+    		date: exercise.date.toDateString
     	});
     });
     result.count = queryResult.length;
