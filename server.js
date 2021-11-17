@@ -187,7 +187,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		log: []
     };
 
-    if (dtFrom == null && dtTo == null && limitInt == 0) {
+    /*if (dtFrom == null && dtTo == null && limitInt == 0) {
     	queryResult = await ExerciseObj.find({
     		userId: userObj._id
     	}).exec();
@@ -203,7 +203,11 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     			$lte: dtTo
     		}
     	}).limit(parseInt(limitInt)).exec();
-    }
+    }*/
+    
+    queryResult = await ExerciseObj.find({
+    		userId: userObj._id
+    	}).exec();
     
     queryResult.forEach(function(exercise) {
     	listLog.push({
