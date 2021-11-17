@@ -1,8 +1,10 @@
 var assert = require('assert');
 const fetch = require('node-fetch');
 
+
 describe('teste 1', function() {
-	it('testar cadastro de exercicio', async function() {
+	it.skip('testar cadastro de exercicio', async function() {
+		this.timeout(5000);
 		const url = 'http://127.0.0.1:3000';
 		console.log(url);
 		const res = await fetch(url + '/api/users', {
@@ -42,3 +44,51 @@ describe('teste 1', function() {
 		}
 	})
 });
+
+describe('teste 2', function() {
+	it('testar count de log', async function() {
+		this.timeout(0);
+		const url = 'http://127.0.0.1:3000';
+		const res = await fetch(url + '/api/users', {
+		    method: 'POST',
+		    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		    body: `username=fcc_test_${Date.now()}`.substr(0, 29)
+		  });
+		  if (res.ok) {
+		  	console.log("res.ok");
+		    const { _id, username } = await res.json();
+		    const expected = {
+		      username,
+		      description: 'test',
+		      duration: 60,
+		      _id,
+		      date: new Date().toDateString()
+		    };
+		    const addRes = await fetch(url + `/api/users/${_id}/exercises`, {
+		      method: 'POST',
+		      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		      body: `description=${expected.description}&duration=${expected.duration}`
+		    });
+		    if (addRes.ok) {
+		    	console.log('addRes.ok');
+		      const logRes = await fetch(url + `/api/users/${_id}/logs`);
+
+		      if (logRes.ok) {
+		      	console.log('logRes.ok');
+
+		        const respo = await logRes.json();
+
+		        console.log(respo);
+
+		        //assert(count);
+		      } else {
+		        throw new Error(`${logRes.status} ${logRes.statusText}`);
+		      }
+		    } else {
+		      throw new Error(`${addRes.status} ${addRes.statusText}`);
+		    }
+		  } else {
+		    throw new Error(`${res.status} ${res.statusText}`);
+		  }
+		})
+	});

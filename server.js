@@ -67,7 +67,14 @@ app.post('/api/users', (req, res, next) => {
 	userObj = new UserObj({username : username});
 	userObj.save((err, data) => {
 		if (err) return next(err);
-		res.json({username : data.username, _id : data._id});
+
+		result = {
+			username : data.username,
+			_id : data._id
+		};
+		console.log('Cadastro result');
+		console.log(result)
+		res.json(result);
 	});
 });
 
@@ -129,12 +136,17 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 	});
 	exerciseObj.save((err, data) => {
 		if (err) return next(err);
-		res.json({
+		console.log('Cadastro exercicise');
+		result = {
 			username : data.username,
 			description : data.description,
 			duration: data.duration,
 			date: data.date.toDateString(),
-			_id : data.userId});
+			_id : data.userId};
+		
+		console.log(result);
+		
+		res.json(result);
 	});
 });
 
@@ -215,6 +227,9 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     });
     result.count = queryResult.length;
     result.log = listLog;
+
+    console.log("Log");
+  	console.log(result);
 
     res.json(result);
 });
