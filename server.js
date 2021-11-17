@@ -181,13 +181,13 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     var listLog = [];
 
     var result = {
+    	_id: userObj._id,
     	username: userObj.username,
 		count: 0,
-		_id: userObj._id,
 		log: []
     };
+
     if (dtFrom == null && dtTo == null && limitInt == 0) {
-    	console.log('quering find');
     	queryResult = await ExerciseObj.find({
     		userId: userObj._id
     	}).exec();
