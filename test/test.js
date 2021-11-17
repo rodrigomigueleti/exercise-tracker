@@ -55,7 +55,6 @@ describe('teste 2', function() {
 		    body: `username=fcc_test_${Date.now()}`.substr(0, 29)
 		  });
 		  if (res.ok) {
-		  	console.log("res.ok");
 		    const { _id, username } = await res.json();
 		    const expected = {
 		      username,
@@ -70,17 +69,11 @@ describe('teste 2', function() {
 		      body: `description=${expected.description}&duration=${expected.duration}`
 		    });
 		    if (addRes.ok) {
-		    	console.log('addRes.ok');
 		      const logRes = await fetch(url + `/api/users/${_id}/logs`);
 
 		      if (logRes.ok) {
-		      	console.log('logRes.ok');
-
-		        const respo = await logRes.json();
-
-		        console.log(respo);
-
-		        //assert(count);
+		        const { count } = await logRes.json();
+		        assert(count);
 		      } else {
 		        throw new Error(`${logRes.status} ${logRes.statusText}`);
 		      }

@@ -68,12 +68,10 @@ app.post('/api/users', (req, res, next) => {
 	userObj.save((err, data) => {
 		if (err) return next(err);
 
-		result = {
+		res.json({
 			username : data.username,
 			_id : data._id
-		};
-
-		res.json(result);
+		});
 	});
 });
 
@@ -91,6 +89,11 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 	var { description } = req.body;
 	var { duration } = req.body;
 	var { date } = req.body;
+
+	console.log('_id: ' + userId);
+	console.log('description: ' + description);
+	console.log('duration: ' + duration);
+	console.log('date: ' + date);
 
 	if (/^\s*$/.test(userId)) {
 		return res.json({_id: 'Obrigatory!'});
@@ -110,15 +113,12 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 
 	var dtCad;
 
-	if (/^\s*$/.test(date)) {
+	if (!date || /^\s*$/.test(date)) {
+		console.log('Data vazia!');
 		dtCad = new Date();
 	} else {
 		dtCad = Date.parseExact(date, "yyyy-MM-dd");
 	}
-
-	if (!isValidDate(dtCad))
-        return res.json({error: "Invalid date!"});
-
    
     var userObj = await UserObj.findOne({_id : userId}).exec();
 
@@ -132,15 +132,18 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 		duration : duration,
 		date : dtCad
 	});
+	console.log('New ExerciseObj criado');
+	console.log(dtCad);
 	exerciseObj.save((err, data) => {
 		if (err) return next(err);
-		result = {
+		console.log('Gravando exercicio');
+		return res.json({
 			username : data.username,
 			description : data.description,
 			duration: data.duration,
 			date: data.date.toDateString(),
-			_id : data.userId};
-		res.json(result);
+			_id : data.userId
+		});
 	});
 });
 
@@ -182,7 +185,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 	var userObj = await UserObj.findOne({_id : userId}).exec();
 
     if (!userObj)
-    	throw Error('Invalid User _id');
+    	return res.json({limit: 'Invalid user id!'});
 
     var queryResult;
     var listLog = [];
@@ -233,9 +236,9 @@ const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 });
 
-function isValidDate(d) {
+/*function isValidDate(d) {
   return d instanceof Date && !isNaN(d);
-}
+}*/
 
 // Error handler
 app.use(function (err, req, res, next) {
