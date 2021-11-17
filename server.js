@@ -27,7 +27,6 @@ const userSchema = new Schema({
 });
 
 const exerciseSchema = new Schema({
-	idUser: {type: String, required: true},
 	username: {type: String, required: true},
 	description: {type: String, required: true},
 	duration: {type: Number, required: true, integer: true},
@@ -124,7 +123,7 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 		username : userObj.username,
 		description : description,
 		duration : duration,
-		date : date
+		date : dtCad
 	});
 	exerciseObj.save((err, data) => {
 		if (err) return next(err);
