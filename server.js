@@ -132,7 +132,7 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 			username : data.username,
 			description : data.description,
 			duration: data.duration,
-			date: data.date,
+			date: data.date.toString('yyyy-MM-dd'),
 			_id : data._id});
 	});
 });
