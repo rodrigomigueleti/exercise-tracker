@@ -120,7 +120,7 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
     	throw Error('Invalid User _id');
 
 	exerciseObj = new ExerciseObj({
-		idUser : userObj._id,
+		_id : userObj._id,
 		username : userObj.username,
 		description : description,
 		duration : duration,
