@@ -186,18 +186,18 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		_id: userObj._id,
 		log: []
     };
-    if (dtFrom == null && dtTo == null && limitInt > 0) {
+    if (dtFrom == null && dtTo == null && limitInt == 0) {
+    	console.log('quering find');
     	queryResult = await ExerciseObj.find({
-    		idUser: userObj._id
-    	}).limit(parseInt(limitInt)).exec();
+    		userId: userObj._id
+    	}).exec();
     } else if (dtFrom != null && dtTo != null && limitInt > 0) {
     	queryResult = await ExerciseObj.find({
-    		idUser: userObj._id,
-
+    		userId: userObj._id,
     	}).limit(parseInt(limitInt)).exec();
     } else {
     	queryResult = await ExerciseObj.find({
-    		idUser: userObj._id,
+    		userId: userObj._id,
     		from: {
     			$gte: dtFrom,
     			$lte: dtTo
