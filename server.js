@@ -107,7 +107,7 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 	if (/^\s*$/.test(date)) {
 		dtCad = new Date();
 	} else {
-		dtCad = new Date(date);
+		dtCad = Date.parseExact(date, "yyyy-MM-dd");
 	}
 
 	if (!isValidDate(dtCad))
