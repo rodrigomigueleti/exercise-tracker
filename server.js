@@ -72,8 +72,7 @@ app.post('/api/users', (req, res, next) => {
 			username : data.username,
 			_id : data._id
 		};
-		console.log('Cadastro result');
-		console.log(result)
+
 		res.json(result);
 	});
 });
@@ -88,7 +87,6 @@ app.get('/api/users', (req, res, next) => {
 
 
 app.post('/api/users/:_id/exercises', async function(req, res, next) {
-	//var { _id } = req.body;
 	var { _id: userId } = req.params;
 	var { description } = req.body;
 	var { duration } = req.body;
@@ -136,16 +134,12 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 	});
 	exerciseObj.save((err, data) => {
 		if (err) return next(err);
-		console.log('Cadastro exercicise');
 		result = {
 			username : data.username,
 			description : data.description,
 			duration: data.duration,
 			date: data.date.toDateString(),
 			_id : data.userId};
-		
-		console.log(result);
-		
 		res.json(result);
 	});
 });
@@ -199,6 +193,8 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		count: 0,
 		log: []
     };
+
+    console.log((dtFrom == null && dtTo == null && limitInt == 0)? 'tudo zero' : 'nao ta zero');
 
     if (dtFrom == null && dtTo == null && limitInt == 0) {
     	queryResult = await ExerciseObj.find({
