@@ -194,7 +194,6 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		log: []
     };
 
-    console.log((dtFrom == null && dtTo == null && limitInt == 0)? 'tudo zero' : 'nao ta zero');
 
     if (dtFrom == null && dtTo == null && limitInt == 0) {
     	queryResult = await ExerciseObj.find({
@@ -213,7 +212,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     		}
     	}).limit(parseInt(limitInt)).exec();
     }
-
+    console.log(queryResult.length);
     queryResult.forEach(function(exercise) {
     	listLog.push({
     		description: exercise.description,
