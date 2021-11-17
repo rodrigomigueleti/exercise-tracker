@@ -1,0 +1,11 @@
+var assert = require('assert');
+
+async () => {
+  const url = getUserInput('url');
+  const res = await fetch(url + '/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `username=fcc_test_${Date.now()}`.substr(0, 29)
+  });
+  if (res.ok) {
+}

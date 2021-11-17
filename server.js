@@ -63,6 +63,7 @@ var LogObj = mongoose.model("LogObj", logSchema);
 
 app.post('/api/users', (req, res, next) => {
 	var { username } = req.body;
+	
 	userObj = new UserObj({username : username});
 	userObj.save((err, data) => {
 		if (err) return next(err);
@@ -111,13 +112,13 @@ app.post('/api/users/:_id/exercises', async function(req, res, next) {
 	}
 
 	if (!isValidDate(dtCad))
-        throw Error("Invalid date");
+        return res.json({error: "Invalid date!"});
 
    
     var userObj = await UserObj.findOne({_id : userId}).exec();
 
     if (!userObj)
-    	throw Error('Invalid User _id');
+    	return res.json({error: "Invalid user _id!"});
 
 	exerciseObj = new ExerciseObj({
 		userId: userObj._id,
@@ -187,7 +188,7 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
 		log: []
     };
 
-    /*if (dtFrom == null && dtTo == null && limitInt == 0) {
+    if (dtFrom == null && dtTo == null && limitInt == 0) {
     	queryResult = await ExerciseObj.find({
     		userId: userObj._id
     	}).exec();
@@ -203,12 +204,8 @@ app.get('/api/users/:_id/logs', async function(req, res, next) {
     			$lte: dtTo
     		}
     	}).limit(parseInt(limitInt)).exec();
-    }*/
-    
-    queryResult = await ExerciseObj.find({
-    		userId: userObj._id
-    	}).exec();
-    
+    }
+
     queryResult.forEach(function(exercise) {
     	listLog.push({
     		description: exercise.description,
